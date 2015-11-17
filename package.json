@@ -1,0 +1,38 @@
+{
+  "name": "babel-preset-metal",
+  "version": "0.0.1",
+  "description": "A babel plugin for Metal.js that automatically registers components.",
+  "license": "MIT",
+  "repository": "mairatma/babel-preset-metal",
+  "author": {
+    "name": "Maira Bello",
+    "email": "maira.araujo@liferay.com"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "coverage": "istanbul cover nodeunit -- test/test.js",
+    "lint": "jshint test/test.js index.js",
+    "test": "nodeunit test/test.js"
+  },
+  "keywords": [
+    "babel",
+    "babel-preset",
+    "metal"
+  ],
+  "dependencies": {
+    "babel-core": "^6.1.2",
+    "bower-directory": "^1.0.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.0",
+    "jshint": "^2.7.0",
+    "nodeunit": "^0.9.1",
+    "sinon": "^1.17.2"
+  }
+}
