@@ -26,10 +26,11 @@
     "metal"
   ],
   "dependencies": {
-    "babel-core": "^6.1.2",
-    "bower-directory": "^1.0.0"
+    "babel-plugin-import-alias-bower": "github:mairatma/babel-plugin-import-alias-bower",
+    "babel-plugin-metal-register-components": "github:mairatma/babel-plugin-metal-register-components"
   },
   "devDependencies": {
+    "bower-directory": "^1.0.0",
     "istanbul": "^0.4.0",
     "jshint": "^2.7.0",
     "nodeunit": "^0.9.1",
