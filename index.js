@@ -18,11 +18,9 @@ function getBowerDir() {
   return bowerDirCache;
 }
 
-function renameAlias(originalPath, parentPath) {
+function renameAlias(originalPath) {
   var result = originalPath;
-  if (originalPath[0] === '.') {
-    result = path.resolve(path.dirname(parentPath), originalPath);
-  } else if (originalPath.substr(0, 6) === 'bower:') {
+  if (originalPath.substr(0, 6) === 'bower:') {
     result = path.join(getBowerDir(), originalPath.substr(6));
   }
   return result.replace(/\\/g, '/');
