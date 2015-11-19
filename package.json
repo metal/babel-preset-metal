@@ -26,7 +26,7 @@
     "metal"
   ],
   "dependencies": {
-    "babel-plugin-metal-register-components": "github:mairatma/babel-plugin-metal-register-components",
+    "babel-plugin-metal-register-components": "^1.0.0",
     "babel-preset-es2015": "^6.1.18",
     "bower-directory": "^1.0.0"
   },
