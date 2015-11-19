@@ -13,6 +13,7 @@ module.exports = {
     var result = babel.transform(code, {presets: [preset]});
 
     assert.notStrictEqual(-1, result.code.indexOf('/path/to/bower/bar/src/foo'));
+    assert.strictEqual('/path/to/bower/bar/src/foo', result.metadata.modules.imports[0].source);
     bowerDirectory.sync.restore();
     test.done();
   },
