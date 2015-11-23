@@ -29,7 +29,8 @@ function renameAlias(originalPath) {
 module.exports = {
   resolveModuleSource: renameAlias,
   plugins: [
-    require('babel-plugin-metal-register-components')
+    require('babel-plugin-metal-register-components'),
+    [require('babel-plugin-transform-es2015-classes'), {loose: true}]
   ],
   presets: [
     require('babel-preset-es2015')
