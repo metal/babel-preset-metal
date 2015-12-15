@@ -1,27 +1,21 @@
 'use strict';
 
-var bowerDirectory = require('bower-directory');
 var path = require('path');
+var util = require('./util');
 
-var bowerDirCache;
-
-/**
- * This function returns the same value as `bowerDirectory.sync()`, but
- * caches it for future calls, instead of recalculating the bower directory
- * path each time like the original function does.
- * @return {string}
- */
-function getBowerDir() {
-  if (!bowerDirCache) {
-    bowerDirCache = bowerDirectory.sync();
-  }
-  return bowerDirCache;
-}
-
-function renameAlias(originalPath) {
+function renameAlias(originalPath, filename) {
   var result = originalPath;
   if (originalPath.substr(0, 6) === 'bower:') {
-    result = path.join(getBowerDir(), originalPath.substr(6));
+    var dir = util.getBowerDir();
+
+    // babel uses 'unknown' as a special value for filename when the transformed
+    // source can't be traced to a file (e.g., transformed string)
+    // https://github.com/babel/babel/blob/d2e7e6a/packages/babel-core/src/transformation/file/options/config.js
+    if (filename && filename !== 'unknown') {
+      dir = path.relative(path.dirname(filename), util.getBowerDir());
+    }
+
+    result = path.join(dir, originalPath.substr(6));
   }
   return result.replace(/\\/g, '/');
 }
