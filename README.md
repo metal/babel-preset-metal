@@ -25,4 +25,4 @@ This is a [babel preset](http://babeljs.io/docs/plugins/) that provides a defaul
 
 ### Others
 
-* `resolveModuleSource` is set to a function that converts aliased bower component imports (using the **bower:** prefix) to real paths.
+* `resolveModuleSource` (a babel option) is set to a function that converts aliased npm dependency imports (using the **npm:** prefix) to real paths.
