@@ -1,2 +1,2 @@
-import foo from "npm:bar/src/foo";
-import bar from "npm:bar/src/bar";
+import foo from "bar/src/foo";
+import bar from "bar/src/bar";

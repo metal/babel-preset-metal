@@ -4,7 +4,7 @@ var path = require('path');
 
 function renameAlias(originalPath, filename) {
   var result = originalPath;
-  if (originalPath.substr(0, 4) === 'npm:') {
+  if (originalPath[0] !== '.' && originalPath[0] !== '/' && originalPath.indexOf(':') === -1) {
     var dir = path.resolve('node_modules');
 
     // babel uses 'unknown' as a special value for filename when the transformed
@@ -17,7 +17,7 @@ function renameAlias(originalPath, filename) {
       console.warn('Warning: missing source path leads to wrong / absolute import path.');
     }
 
-    result = path.join(dir, originalPath.substr(4));
+    result = path.join(dir, originalPath);
   }
   return result.replace(/\\/g, '/');
 }

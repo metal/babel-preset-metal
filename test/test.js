@@ -18,7 +18,7 @@ module.exports = {
   },
 
   testNpmImport: function(test) {
-    var code = 'import foo from "npm:bar/src/foo";\nimport bar from "npm:bar/src/bar";';
+    var code = 'import foo from "bar/src/foo";\nimport bar from "bar/src/bar";';
     var result = babel.transform(code, {presets: [preset], filename: path.resolve('src/x/y/z/foo.js')});
 
     assert.notStrictEqual(-1, result.code.indexOf('../../../../node_modules/bar/src/foo'));
@@ -29,7 +29,7 @@ module.exports = {
   },
 
   testNpmImportMissingSourceFilename: function(test) {
-    var code = 'import foo from "npm:bar/src/foo";\nimport bar from "npm:bar/src/bar";';
+    var code = 'import foo from "bar/src/foo";\nimport bar from "bar/src/bar";';
     var result = babel.transform(code, {presets: [preset]});
 
     assert.strictEqual(2, console.warn.callCount);
@@ -51,7 +51,7 @@ module.exports = {
     test.done();
   },
 
-  testNotNpmImport: function(test) {
+  testNotNpmRelativeImport: function(test) {
     var code = 'import foo from "../src/foo";';
     var result = babel.transform(code, {presets: [preset]});
 
@@ -59,7 +59,16 @@ module.exports = {
     assert.strictEqual('../src/foo', result.metadata.modules.imports[0].source);
     test.done();
   },
-  
+
+  testNotNpmPrefixImport: function(test) {
+    var code = 'import foo from "bower:bar/src/foo";';
+    var result = babel.transform(code, {presets: [preset]});
+
+    assert.notStrictEqual(-1, result.code.indexOf('bower:bar/src/foo'));
+    assert.strictEqual('bower:bar/src/foo', result.metadata.modules.imports[0].source);
+    test.done();
+  },
+
   testComponentRegistration: function(test) {
     var code = 'class Foo extends Bar {}\nexport default Foo;';
     var result = babel.transform(code, {presets: [preset]});

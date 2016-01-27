@@ -25,4 +25,4 @@ This is a [babel preset](http://babeljs.io/docs/plugins/) that provides a defaul
 
 ### Others
 
-* `resolveModuleSource` (a babel option) is set to a function that converts aliased npm dependency imports (using the **npm:** prefix) to real paths.
+* `resolveModuleSource` (a babel option) is set to a function that converts imports that are neither relative nor absolute (i.e. start with neither "/" nor ".") to real paths relative to **node_modules**.
