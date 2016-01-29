@@ -1,33 +1,42 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 
-var existsCache = {};
-function checkFileExists(filename) {
-  if (!existsCache[filename]) {
-    existsCache[filename] = fs.existsSync(filename);
+function getConfig(moduleName) {
+  try {
+    return require(path.join(moduleName, 'package.json'));
+  } catch (e) {
+    return {};
   }
-  return existsCache[filename];
 }
 
-/**
- * If node would get the file from "lib" folder, look for it in the "src" folder
- * instead, since we want the original ES6 file, not compiled to Common JS.
- */
-function getSrcFile(originalPath, filename) {
-  var libPath = path.join(originalPath, 'lib');
-  var srcFile = filename.replace(libPath, path.join(originalPath, 'src'));
-  if (srcFile !== filename && checkFileExists(srcFile)) {
-    return srcFile;
+function getFullPath(originalPath) {
+  var fullPath = originalPath;
+  if (path.dirname(originalPath) === '.') {
+    // There are no subfolders, so node will try to use file specified by There
+    // "main" key in the package.json. We need the browser version though, so
+    // let's lookup the "browser" key instead.
+    var config = getConfig(originalPath);
+    if (config.browser) {
+      fullPath = path.join(originalPath, config.browser);
+    }
   }
-  return filename;
+  return getModulePath(fullPath);
+}
+
+function getModulePath(name) {
+  try {
+    return require.resolve(name);
+  } catch (e) {
+    // If a module wasn't found with this name, just return the original path.
+    return name;
+  }
 }
 
 function renameAlias(originalPath, filename) {
   var result = originalPath;
   if (originalPath[0] !== '.' && originalPath[0] !== '/' && originalPath.indexOf(':') === -1) {
-    var fullPath = getSrcFile(originalPath, require.resolve(originalPath));
+    var fullPath = getFullPath(originalPath);
     result = path.join(path.dirname(fullPath), path.basename(fullPath, '.js'));
 
     // babel uses 'unknown' as a special value for filename when the transformed

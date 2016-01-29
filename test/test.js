@@ -13,17 +13,25 @@ var rewireRevert;
 module.exports = {
   setUp: function(done) {
     sinon.stub(console, 'warn');
-    rewireRevert = preset.__set__('require', {
-      resolve: function(file) {
-        if (file === 'bar/lib/foo') {
-          return path.resolve('node_modules', 'bar/lib/foo.js');
-        } else if (file === 'bar') {
-          return path.resolve('node_modules', 'bar/lib/index.js');
-        } else {
-          return file;
-        }
+    rewireRevert = preset.__set__('require', function(file) {
+      if (file.indexOf('fromMain') !== -1) {
+        throw new Error();
+      } else {
+        return {
+          browser: 'src/index.js'
+        };
       }
     });
+
+    preset.__get__('require').resolve = function(file) {
+      if (file === 'fromMain') {
+        return path.resolve('node_modules', 'fromMain/lib/index.js');
+      } else if (file === 'bar') {
+        return path.resolve('node_modules', 'bar/lib/index.js');
+      } else {
+        return path.resolve('node_modules', file);
+      }
+    };
     done();
   },
 
@@ -42,16 +50,16 @@ module.exports = {
     test.done();
   },
 
-  testNpmImportFromDefault: function(test) {
-    var code = 'import bar from "bar";';
+  testNpmImportFromMain: function(test) {
+    var code = 'import fromMain from "fromMain";';
     var result = babel.transform(code, {presets: [preset], filename: path.resolve('src/x/y/z/foo.js')});
 
-    assert.notStrictEqual(-1, result.code.indexOf('../../../../node_modules/bar/lib/index'));
-    assert.strictEqual('../../../../node_modules/bar/lib/index', result.metadata.modules.imports[0].source);
+    assert.notStrictEqual(-1, result.code.indexOf('../../../../node_modules/fromMain/lib/index'));
+    assert.strictEqual('../../../../node_modules/fromMain/lib/index', result.metadata.modules.imports[0].source);
     test.done();
   },
 
-  testNpmImportFromSrc: function(test) {
+  testNpmImportFromBrowser: function(test) {
     sinon.stub(fs, 'existsSync').returns(true);
 
     var code = 'import bar from "bar";';
@@ -99,7 +107,7 @@ module.exports = {
     assert.strictEqual('bower:bar/src/foo', result.metadata.modules.imports[0].source);
     test.done();
   },
-  
+
   testComponentRegistration: function(test) {
     var code = 'class Foo extends Bar {}\nexport default Foo;';
     var result = babel.transform(code, {presets: [preset]});
