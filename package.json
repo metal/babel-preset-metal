@@ -3,7 +3,7 @@
   "version": "2.1.1",
   "description": "A babel plugin for Metal.js that automatically registers components.",
   "license": "MIT",
-  "repository": "mairatma/babel-preset-metal",
+  "repository": "metal/babel-preset-metal",
   "author": {
     "name": "Maira Bello",
     "email": "maira.araujo@liferay.com"
