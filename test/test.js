@@ -13,25 +13,19 @@ var rewireRevert;
 module.exports = {
   setUp: function(done) {
     sinon.stub(console, 'warn');
-    rewireRevert = preset.__set__('require', function(file) {
-      if (file.indexOf('fromMain') !== -1) {
-        throw new Error();
-      } else {
-        return {
-          browser: 'src/index.js'
-        };
-      }
-    });
-
-    preset.__get__('require').resolve = function(file) {
+    rewireRevert = preset.__set__('resolve', function(file) {
       if (file === 'fromMain') {
         return path.resolve('node_modules', 'fromMain/lib/index.js');
+      } else if (file === 'fromMain/package.json') {
+        throw new Error();
       } else if (file === 'bar') {
         return path.resolve('node_modules', 'bar/lib/index.js');
+      } else if (file === 'bar/package.json') {
+        return path.resolve('test/fixtures/mockPackage.json');
       } else {
         return path.resolve('node_modules', file);
       }
-    };
+    });
     done();
   },
 

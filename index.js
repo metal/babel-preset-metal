@@ -1,10 +1,11 @@
 'use strict';
 
 var path = require('path');
+var resolve = require('./lib/resolve');
 
 function getConfig(moduleName) {
   try {
-    return require(path.join(moduleName, 'package.json'));
+    return require(resolve(path.join(moduleName, 'package.json')));
   } catch (e) {
     return {};
   }
@@ -26,7 +27,7 @@ function getFullPath(originalPath) {
 
 function getModulePath(name) {
   try {
-    return require.resolve(name);
+    return resolve(name);
   } catch (e) {
     // If a module wasn't found with this name, just return the original path.
     console.warn('Module with name "' + name + '" could not be found by node."', e);
