@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-metal",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A babel plugin for Metal.js that automatically registers components.",
   "license": "MIT",
   "repository": "metal/babel-preset-metal",
