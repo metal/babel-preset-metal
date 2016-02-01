@@ -16,7 +16,7 @@ module.exports = {
     rewireRevert = preset.__set__('resolve', function(file) {
       if (file === 'fromMain') {
         return path.resolve('node_modules', 'fromMain/lib/index.js');
-      } else if (file === 'fromMain/package.json') {
+      } else if (file === 'fromMain/package.json' || file === 'unknown') {
         throw new Error();
       } else if (file === 'bar') {
         return path.resolve('node_modules', 'bar/lib/index.js');
@@ -62,6 +62,16 @@ module.exports = {
 
     assert.notStrictEqual(-1, result.code.indexOf('../../../../node_modules/bar/src/index'));
     assert.strictEqual('../../../../node_modules/bar/src/index', result.metadata.modules.imports[0].source);
+    test.done();
+  },
+
+  testNpmUnknownImport: function(test) {
+    var code = 'import foo from "unknown";';
+    var result = babel.transform(code, {presets: [preset], filename: path.resolve('src/x/y/z/foo.js')});
+
+    assert.notStrictEqual(-1, result.code.indexOf('unknown'));
+    assert.strictEqual('../../../../unknown', result.metadata.modules.imports[0].source);
+    assert.strictEqual(1, console.warn.callCount);
     test.done();
   },
 
