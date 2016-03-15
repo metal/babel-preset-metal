@@ -112,13 +112,6 @@ module.exports = {
     test.done();
   },
 
-  testComponentRegistration: function(test) {
-    var code = 'class Foo extends Bar {}\nexport default Foo;';
-    var result = babel.transform(code, {presets: [preset]});
-    assert.notStrictEqual(-1, result.code.indexOf('Foo.prototype.registerMetalComponent'));
-    test.done();
-  },
-
   testEs2015: function(test) {
     var code = 'class Foo extends Bar {}\nexport default Foo;';
     var result = babel.transform(code, {presets: [preset]});
