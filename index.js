@@ -14,12 +14,12 @@ function getConfig(moduleName) {
 function getFullPath(originalPath) {
   var fullPath = originalPath;
   if (path.dirname(originalPath) === '.') {
-    // There are no subfolders, so node will try to use file specified by There
-    // "main" key in the package.json. We need the browser version though, so
-    // let's lookup the "browser" key instead.
+    // There are no subfolders, so node will try to use file specified by the
+    // "main" key in the package.json. We need the es6 version though, so
+    // let's lookup the "jsnext:main" key instead, if it's present.
     var config = getConfig(originalPath);
-    if (config.browser) {
-      fullPath = path.join(originalPath, config.browser);
+    if (config['jsnext:main']) {
+      fullPath = path.join(originalPath, config['jsnext:main']);
     }
   }
   return getModulePath(fullPath);

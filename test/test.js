@@ -53,7 +53,7 @@ module.exports = {
     test.done();
   },
 
-  testNpmImportFromBrowser: function(test) {
+  testNpmImportFromJSNextMain: function(test) {
     sinon.stub(fs, 'existsSync').returns(true);
 
     var code = 'import bar from "bar";';
